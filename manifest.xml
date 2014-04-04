@@ -1,41 +1,32 @@
 <package>
-  <description brief="Dynamic graph PR-2 package">
+  <description brief="Dynamic graph Universal Robot package">
 
     UR real-time controller for dynamic-graph.
 
-    Gather dedicated dynamic-graph entities, humanoid robot python
-    classs definition and UR real-time controller.
+    Gather dedicated dynamic-graph entities, python
+    class definition and UR real-time controller.
 
   </description>
-  <author>Thomas Moulard</author>
+  <author>Benjamin Coudrin</author>
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
-  <url>http://ros.org/wiki/sot_ur</url>
+  <url></url>
 
-  <export>
+  <!--<export>
     <pr2_controller_interface plugin="${prefix}/controller_plugins.xml" />
     <rosdoc config="rosdoc.yaml" />
-  </export>
+  </export>-->
 
-  <rosdep name="dynamic-graph"/>
-  <rosdep name="dynamic-graph-python"/>
-  <rosdep name="sot-core"/>
-  <rosdep name="sot-dynamic"/>
-
-
-  <depend package="std_msgs"/>
-  <depend package="std_srvs"/>
-  <depend package="roscpp"/>
-
-  <depend package="pr2_controller_interface"/>
+  <!--<depend package="pr2_controller_interface"/>
   <depend package="pr2_mechanism_model"/>
+  <depend package="pr2_controllers_msgs"/>-->
+  <depend package="actionlib"/>
   <depend package="controller_interface"/>
   <depend package="controller_manager"/>
   <depend package="control_toolbox"/>
 
   <depend package="urdf"/>
-  <depend package="urdf_interface"/>
+  <!--<depend package="urdf_interface"/>-->
 
   <depend package="dynamic_graph_bridge"/>
-
 </package>

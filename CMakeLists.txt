@@ -1,55 +1,58 @@
 cmake_minimum_required(VERSION 2.4.6)
+include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 
-
-
-#project(sot_ur)
-
-#find_package(catkin REQUIRED COMPONENTS roscpp rospy std_msgs std_srvs geometry_msgs sensor_msgs tf )
-
-#catkin_package()
-
-
-
-## LAAS cmake submodule part
-set(PROJECT_DESCRIPTION "sot controller for Universal  Robot")
-set(PROJECT_NAME sot_ur)
-set(PROJECT_URL "")
-
-set(CXX_DISABLE_WERROR False)
 include(cmake/base.cmake)
 include(cmake/python.cmake)
+if(NOT DEFINED CMAKE_INSTALL_LIBDIR)
+  set(CMAKE_INSTALL_LIBDIR lib)
+endif()
+include(cmake/GNUInstallDirs.cmake)
 
+set(ROS_BUILD_TYPE RelWithDebInfo)
+
+rosbuild_init()
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 # Search for dependencies.
-add_required_dependency("jrl-mathtools")
-add_required_dependency("jrl-mal")
-add_required_dependency("dynamic-graph")
-add_required_dependency("dynamic-graph-python")
-add_required_dependency("sot-core")
+ADD_REQUIRED_DEPENDENCY("jrl-mathtools")
+ADD_REQUIRED_DEPENDENCY("jrl-mal")
+ADD_REQUIRED_DEPENDENCY("dynamic-graph")
+ADD_REQUIRED_DEPENDENCY("dynamic-graph-python")
+ADD_REQUIRED_DEPENDENCY("sot-core")
+ADD_REQUIRED_DEPENDENCY("jrl-dynamics-urdf >= 2.0.1-14")
 
 # This is required by the Python prologue.
-add_required_dependency("sot-dynamic")
+ADD_REQUIRED_DEPENDENCY("sot-dynamic")
+
+
+# Handle rpath necessary to handle ROS multiplace packages
+# libraries inclusion
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # Python
+INCLUDE(cmake/python.cmake)
 FINDPYTHON()
 INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 LINK_DIRECTORIES(${PYTHON_LIBRARY_DIRS})
 
-#set(SOURCES
-#    src/ur_sot_controller.cpp
-#    src/ur_device.cpp)
+set(SOURCES
+    src/sot_ur.cpp)
 
-#set(HEADERS
-#    include/ur_sot_controller.h
-#    include/ur_device.h)
+set(HEADERS
+    src/sot_ur.hh)
 
-#add_library(sot_ur ${HEADERS} ${SOURCES})
+rosbuild_add_library(sot_ur ${HEADERS} ${SOURCES})
 
-#target_link_libraries(sot_ur dynamic-graph)
-#target_link_libraries(sot_ur sot-core)
-#target_link_libraries(sot_ur dynamic-graph-python)
-#PKG_CONFIG_USE_DEPENDENCY(sot_ur "dynamic-graph")
-#PKG_CONFIG_USE_DEPENDENCY(sot_ur "sot-core")
-#PKG_CONFIG_USE_DEPENDENCY(sot_ur "dynamic-graph-python")
+PKG_CONFIG_USE_DEPENDENCY(sot_ur "dynamic-graph")
+PKG_CONFIG_USE_DEPENDENCY(sot_ur "sot-core")
+PKG_CONFIG_USE_DEPENDENCY(sot_ur "dynamic-graph-python")
+PKG_CONFIG_USE_DEPENDENCY(sot_ur "jrl-dynamics-urdf")
+install(TARGETS sot_ur DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
 ADD_SUBDIRECTORY(src)
+

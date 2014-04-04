@@ -1,16 +1,16 @@
 #include <strings.h>
 #include <Python.h>
 
-#include "pr2.hh"
+/*#include "pr2.hh"
 #include "sot_pr2.hh"
 #include <pluginlib/class_list_macros.h>
 #include <dynamic_graph_bridge/ros_init.hh>
 
-const std::string SOT_OPENHRP_OUTPUT_FILE ("/tmp/sot.out");
+const std::string SOT_OPENHRP_OUTPUT_FILE ("/tmp/sot.out");*/
 
 namespace sot_pr2
 {
-  static void
+  /*static void
   runPython (std::ostream& file,
 	     const std::string& command,
 	     ::dynamicgraph::Interpreter& interpreter)
@@ -125,11 +125,11 @@ namespace sot_pr2
   {
     if (!entity_->cleanup (jointsMap_))
       ROS_ERROR_STREAM("failed to stop");
-  }
+  }*/
 
 } // end of namespace sot_pr2.
 
 /// Register controller to pluginlib
-PLUGINLIB_DECLARE_CLASS(sot_pr2,SotPr2Plugin,
+/*PLUGINLIB_DECLARE_CLASS(sot_pr2,SotPr2Plugin,
                         sot_pr2::SotPr2,
-                        pr2_controller_interface::Controller)
+                        pr2_controller_interface::Controller))*/
