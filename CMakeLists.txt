@@ -41,10 +41,14 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIRS})
 LINK_DIRECTORIES(${PYTHON_LIBRARY_DIRS})
 
 set(SOURCES
-    src/sot_ur.cpp)
+    src/ur_device.cpp
+    src/ur_sot_controller.cpp
+    src/ur_controller_plugin.cpp)
 
 set(HEADERS
-    src/sot_ur.hh)
+    include/sot_ur/ur_device.h
+    include/sot_ur/ur_sot_controller.h
+    include/sot_ur/ur_controller_plugin.h)
 
 rosbuild_add_library(sot_ur ${HEADERS} ${SOURCES})
 

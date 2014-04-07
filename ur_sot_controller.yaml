@@ -1,0 +1,29 @@
+sot_ur:
+    type: sot_ur/UrSotControllerPlugin
+    joints:
+        - l_shoulder_pan_joint
+        - l_shoulder_lift_joint
+        - l_elbow_joint
+        - l_wrist_1_joint
+        - l_wrist_2_joint
+        - l_wrist_3_joint
+        - r_shoulder_pan_joint
+        - r_shoulder_lift_joint
+        - r_elbow_joint
+        - r_wrist_1_joint
+        - r_wrist_2_joint
+        - r_wrist_3_joint
+    
+    gains:
+        l_shoulder_pan_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        l_shoulder_lift_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        l_elbow_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        l_wrist_1_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        l_wrist_2_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        l_wrist_3_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_shoulder_pan_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_shoulder_lift_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_elbow_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_wrist_1_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_wrist_2_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}
+        r_wrist_3_joint: {p: 1000.0, i: 0.0, d: 0.0, i_clamp: 0.0, i_clamp_min: 0.0, i_clamp_max: 0.0}        

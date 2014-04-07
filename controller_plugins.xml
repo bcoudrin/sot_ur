@@ -1,0 +1,5 @@
+<library path="lib/libsot_ur">
+  <class name="sot_ur/UrSotControllerPlugin"
+         type="sot_ur::UrControllerPlugin"
+         base_class_type="controller_interface::ControllerBase" />
+</library>
