@@ -7,7 +7,7 @@ namespace sot_ur {
 std::ofstream logout;
 
 UrControllerPlugin::UrControllerPlugin()
-    : controller_interface::Controller<hardware_interface::EffortJointInterface>(),
+    : controller_interface::Controller<JointInterface>(),
       sot_controller_(),
       loop_count_(0),
       robot_(NULL) {
@@ -18,7 +18,7 @@ UrControllerPlugin::~UrControllerPlugin() {
 }
 
 bool
-UrControllerPlugin::init(hardware_interface::EffortJointInterface *robot,
+UrControllerPlugin::init(JointInterface *robot,
                          ros::NodeHandle &n) {
     sot_controller_.node_ = n;
 
@@ -72,6 +72,9 @@ UrControllerPlugin::init(hardware_interface::EffortJointInterface *robot,
     joint_control_.resize(jsz);
     error_raw.resize(jsz);
     error.resize(jsz);
+    cmd.resize(jsz,0.0);
+    for (size_t i=0; i<jsz; ++i)
+        cmd[i] = 0.;
 
     timeFromStart_ = 0.0;
 
@@ -104,11 +107,15 @@ UrControllerPlugin::readControl(const ros::Duration &dt) {
     // Update command
     joint_control_ = controlValues_["joints"].getValues();
     joint_velocity_ = controlValues_["velocities"].getValues();
-    // 0-11 are casters and are controled by base controller
+    //joint_effort_ = controlValues_["torques"].getValues();
     for (unsigned int i=0; i<joints_.size(); ++i) {
         error[i] = joints_[i].getPosition() - joint_control_[i];
+        //error[i] = joints_[i].getEffort() - joint_effort_[i];
         double errord = joints_[i].getVelocity() - joint_velocity_[i];
-        joints_[i].setCommand(pids_[i].updatePid(error[i], errord, dt));
+        joints_[i].setCommand(pids_[i].computeCommand(error[i], errord, dt));
+        //joints_[i].setCommand(pids_[i].computeCommand(error[i], dt));
+        //cmd[i] += pids_[i].updatePid(error[i], errord, dt);
+        //joints_[i].setCommand(cmd[i]);
     }
     ++loop_count_;
 }
@@ -172,8 +179,8 @@ UrControllerPlugin::stopping(const ros::Time& time) {
 }
 
 /// Register controller to pluginlib
-/*PLUGINLIB_EXPORT_CLASS(sot_ur::UrControllerPlugin,
-                       controller_interface::ControllerBase)*/
-PLUGINLIB_DECLARE_CLASS(sot_ur, UrControllerPlugin, sot_ur::UrControllerPlugin, controller_interface::ControllerBase);
+PLUGINLIB_EXPORT_CLASS(sot_ur::UrControllerPlugin,
+                       controller_interface::ControllerBase)
+//PLUGINLIB_DECLARE_CLASS(sot_ur, UrControllerPlugin, sot_ur::UrControllerPlugin, controller_interface::ControllerBase);
 
 }

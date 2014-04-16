@@ -2,7 +2,7 @@ from numpy import eye, array, diag
 from dynamic_graph import plug
 from dynamic_graph.sot.core import *
 from dynamic_graph.sot.dynamics import *
-from dynamic_graph.sot.pr2.robot import *
+from dynamic_graph.sot.ur.robot import *
 from dynamic_graph.sot.core.meta_task_6d import toFlags
 from dynamic_graph.sot.core.matrix_util import matrixToTuple
 from dynamic_graph.sot.core.meta_tasks_kine import MetaTaskKine6d
@@ -18,7 +18,7 @@ def initialize (robot, solverType=SOT):
 
     # TODO: this should disappear in the end.     
     # --- center of mass ------------
-    (robot.featureCom, robot.featureComDes, robot.comTask) = \
+    (robot.featureCom, robot.featureComDes, robot.comTask, robot.comGain) = \
         createCenterOfMassFeatureAndTask(robot,
         '{0}_feature_com'.format(robot.name),
         '{0}_feature_ref_com'.format(robot.name),
@@ -27,8 +27,9 @@ def initialize (robot, solverType=SOT):
     # --- operational points tasks -----
     robot.features = dict()
     robot.tasks = dict()
+    robot.gains = dict()
     for op in robot.OperationalPoints:
-        (robot.features[op], robot.tasks[op]) = \
+        (robot.features[op], robot.tasks[op], robot.gains[op]) = \
             createOperationalPointFeatureAndTask(robot,
             op, '{0}_feature_{1}'.format(robot.name, op),
             '{0}_task_{1}'.format(robot.name, op))
@@ -39,7 +40,7 @@ def initialize (robot, solverType=SOT):
             memberName += i.capitalize()
         setattr(robot, memberName, robot.features[op])
 
-    initializeSignals (robot)
+    initializeSignals (robot, robot)
 
     # --- create solver --- #
     solver = Solver (robot, solverType)

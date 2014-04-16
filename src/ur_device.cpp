@@ -12,13 +12,13 @@ UrDevice::UrDevice(const std::string &name)
 : dynamicgraph::sot::Device(name),
   timestep_(TIMESTEP_DEFAULT),
   previous_state_(),
-  robotState_ ("StackOfTasks(" + name + ")::output(vector)::robotState"),
+  torque_ ("StackOfTasks(" + name + ")::output(vector)::torque"),
   pose(),
   baseff_(),
   loop_count_(0)
 {
     sotDEBUGIN(25);
-    signalRegistration(robotState_);
+    signalRegistration(torque_);
     baseff_.resize(12);
 
     std::string docstring;
@@ -101,6 +101,8 @@ UrDevice::getControl(ControlMap &controlOut) {
     anglesOut.resize(state_.size());
     std::vector<double> velocitiesOut;
     velocitiesOut.resize(state_.size());
+    std::vector<double> torqueOut;
+    torqueOut.resize(state_.size());
 
     try { increment(timestep_); }
     catch (std::exception & e) {
@@ -125,6 +127,17 @@ UrDevice::getControl(ControlMap &controlOut) {
             control(i) = 0.;
     }
 
+    ml::Vector torque;
+    try {
+        torque = torque_.accessCopy();
+    }
+    catch (...) {
+        torque.resize(state_.size());
+        for (unsigned i=0; i<state_.size(); ++i)
+            torque(i) = 0.;
+    }
+
+
     // Specify joint values
     if (anglesOut.size() != state_.size() - 6)
         anglesOut.resize(state_.size() - 6);
@@ -138,6 +151,29 @@ UrDevice::getControl(ControlMap &controlOut) {
     for (unsigned int i=6; i<state_.size(); ++i)
         velocitiesOut[i-6] = control(i);
     controlOut["velocities"].setValues(velocitiesOut);
+
+    // Specify joint torque
+    if (torque.size() != state_.size()) {
+        torque.resize(state_.size());
+        for (unsigned i=0; i<state_.size(); ++i)
+            torque(i) = 0.;
+    }
+
+    std::cout << "TRACE 1" << std::endl;
+    if (torqueOut.size() != state_.size() - 6) {
+        std::cout << "TRACE 1.1" << std::endl;
+        torqueOut.resize(state_.size() - 6);
+        std::cout << "TRACE 1.2" << std::endl;
+    }
+    std::cout << "TRACE 2" << std::endl;
+    for (unsigned int i=6; i<state_.size(); ++i) {
+        std::cout << "TRACE 2.1" << std::endl;
+        torqueOut[i-6] = torque(i);
+        std::cout << "TRACE 2.2" << std::endl;
+    }
+    std::cout << "TRACE 3" << std::endl;
+    controlOut["torques"].setValues(torqueOut);
+    std::cout << "TRACE 4" << std::endl;
 
     sotDEBUGOUT(25);
 }

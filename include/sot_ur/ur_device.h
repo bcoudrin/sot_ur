@@ -34,10 +34,9 @@ namespace sot_ur {
     protected:
         double timestep_;
         dynamicgraph::Vector previous_state_;
-        dynamicgraph::Signal<dynamicgraph::Vector, int> robotState_;
+        dynamicgraph::Signal<dynamicgraph::Vector, int> torque_;
 
     private:
-        dynamicgraph::Vector mlRobotState;
         dynamicgraph::sot::MatrixRotation pose;
         std::vector<double> baseff_;
 

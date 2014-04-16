@@ -15,12 +15,14 @@
 
 namespace sot_ur {
 
-class UrControllerPlugin : public controller_interface::Controller<hardware_interface::EffortJointInterface> {
+typedef hardware_interface::EffortJointInterface JointInterface;
+
+class UrControllerPlugin : public controller_interface::Controller<JointInterface> {
 public:
     explicit UrControllerPlugin();
     virtual ~UrControllerPlugin();
 
-    virtual bool init(hardware_interface::EffortJointInterface *robot,
+    virtual bool init(JointInterface *robot,
                       ros::NodeHandle &n);
     virtual void starting(const ros::Time& time);
     virtual void update(const ros::Time& time, const ros::Duration& dt);
@@ -42,6 +44,7 @@ private:
     std::vector<double> joint_control_;
     std::vector<double> error_raw;
     std::vector<double> error;
+    std::vector<double> cmd;
 
 
     // Ur Controller
@@ -51,7 +54,7 @@ private:
     static const double setpoint_ = 3.00;
     std::vector<hardware_interface::JointHandle> joints_;
     std::vector<control_toolbox::Pid> pids_;
-    hardware_interface::EffortJointInterface *robot_;
+    JointInterface *robot_;
 
     // ROS interface
     //ros::NodeHandle node_;

@@ -29,4 +29,8 @@
   <!--<depend package="urdf_interface"/>-->
 
   <depend package="dynamic_graph_bridge"/>
+  
+  <export>
+    <controller_interface plugin="${prefix}/controller_plugins.xml" />
+  </export>
 </package>
