@@ -1,11 +1,10 @@
 <launch>
     <arg name="gui" default="True" />
     <param name="use_gui" value="$(arg gui)"/>
-    <param name="robot_base_link" value="base_footprint"/>
-    <!--<param name="ref_link" value="odom_combined"/>-->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find euroclauncher)/urdf/t3.urdf.xacro'" />
 
-    <arg name="frame" value="odom"/>
-    <arg name="child_frame" value="base_footprint"/>
+    <arg name="frame" value="world"/>
+    <arg name="child_frame" value="torso_link"/>
 
     <node name="robot_pose_publisher" pkg="sot_pr2" type="robot_pose_publisher" args="_frame:=$(arg frame) _child_frame:=$(arg child_frame)">
         <env name="ROS_NAMESPACE" value="/dynamic_graph" />

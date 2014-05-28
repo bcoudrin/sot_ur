@@ -105,17 +105,23 @@ UrControllerPlugin::fillSensors() {
 void
 UrControllerPlugin::readControl(const ros::Duration &dt) {
     // Update command
+#if 0
     joint_control_ = controlValues_["joints"].getValues();
     joint_velocity_ = controlValues_["velocities"].getValues();
-    //joint_effort_ = controlValues_["torques"].getValues();
+#else
+    joint_effort_ = controlValues_["torques"].getValues();
+#endif
     for (unsigned int i=0; i<joints_.size(); ++i) {
+#if 0
         error[i] = joints_[i].getPosition() - joint_control_[i];
-        //error[i] = joints_[i].getEffort() - joint_effort_[i];
         double errord = joints_[i].getVelocity() - joint_velocity_[i];
         joints_[i].setCommand(pids_[i].computeCommand(error[i], errord, dt));
-        //joints_[i].setCommand(pids_[i].computeCommand(error[i], dt));
+#else
+        error[i] = joints_[i].getEffort() - joint_effort_[i];
+        joints_[i].setCommand(pids_[i].computeCommand(error[i], dt));
         //cmd[i] += pids_[i].updatePid(error[i], errord, dt);
         //joints_[i].setCommand(cmd[i]);
+#endif
     }
     ++loop_count_;
 }

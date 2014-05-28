@@ -10,6 +10,48 @@ from dynamic_graph.sot.dyninv import TaskInequality, TaskJointLimits
 from dynamic_graph.sot.core.meta_task_visual_point import MetaTaskVisualPoint
 
 from dynamic_graph.sot.application.velocity.precomputed_tasks import Solver, createCenterOfMassFeatureAndTask, createOperationalPointFeatureAndTask, initializeSignals
+from dynamic_graph.sot.dyninv import SolverDynReduced
+
+class SolverUR:
+
+    def __init__(self, robot, solverType=SOT):
+        self.robot = robot
+
+        # Make sure control does not exceed joint limits.
+        self.jointLimitator = JointLimitator('joint_limitator')
+        plug(self.robot.dynamic.position, self.jointLimitator.joint)
+        plug(self.robot.dynamic.upperJl, self.jointLimitator.upperJl)
+        plug(self.robot.dynamic.lowerJl, self.jointLimitator.lowerJl)
+
+        # Create the solver.
+        self.sot = solverType('solver')
+        self.sot.signal('damping').value = 1e-6
+        self.sot.setSize(self.robot.dimension)
+
+
+        # Plug the solver control into the filter.
+         #plug(self.sot.control, self.jointLimitator.controlIN)
+
+        # Important: always use 'jointLimitator.control'
+        # and NOT 'sot.control'!
+
+        if robot.device:
+            plug(self.sot.forces, robot.device.control)
+
+    def push (self, task):
+        """
+        Proxy method to push a task in the sot
+        """
+        self.sot.push (task.name)
+
+    def remove (self, task):
+        """
+        Proxy method to remove a task from the sot
+        """
+        self.sot.remove (task.name)
+
+    def __str__ (self):
+        return self.sot.display ()
 
 def initialize (robot, solverType=SOT):
     """
@@ -43,7 +85,7 @@ def initialize (robot, solverType=SOT):
     initializeSignals (robot, robot)
 
     # --- create solver --- #
-    solver = Solver (robot, solverType)
+    solver = SolverUR (robot, SolverDynReduced)
 
     # --- push balance task --- #
     metaContact = UrContactTask(robot)

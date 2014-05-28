@@ -159,21 +159,21 @@ UrDevice::getControl(ControlMap &controlOut) {
             torque(i) = 0.;
     }
 
-    std::cout << "TRACE 1" << std::endl;
+    //std::cout << "TRACE 1" << std::endl;
     if (torqueOut.size() != state_.size() - 6) {
-        std::cout << "TRACE 1.1" << std::endl;
+        //std::cout << "TRACE 1.1" << std::endl;
         torqueOut.resize(state_.size() - 6);
-        std::cout << "TRACE 1.2" << std::endl;
+        //std::cout << "TRACE 1.2" << std::endl;
     }
-    std::cout << "TRACE 2" << std::endl;
+    //std::cout << "TRACE 2" << std::endl;
     for (unsigned int i=6; i<state_.size(); ++i) {
-        std::cout << "TRACE 2.1" << std::endl;
+        //std::cout << "TRACE 2.1" << std::endl;
         torqueOut[i-6] = torque(i);
-        std::cout << "TRACE 2.2" << std::endl;
+        //std::cout << "TRACE 2.2" << std::endl;
     }
-    std::cout << "TRACE 3" << std::endl;
+    //std::cout << "TRACE 3" << std::endl;
     controlOut["torques"].setValues(torqueOut);
-    std::cout << "TRACE 4" << std::endl;
+    //std::cout << "TRACE 4" << std::endl;
 
     sotDEBUGOUT(25);
 }
